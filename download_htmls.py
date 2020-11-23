@@ -21,17 +21,11 @@ def get_and_store_html(line, driver, idx, directory):
 
 def run_html_downloader(driver, start, end, directory):
     with open('books_urls.txt', 'r') as f:
-        idx = 0
-        for line in f.readlines():
-            idx+=1
-            if idx < start:
-                print('skip')
-                continue
-            if idx > end:
-                print('done')
-                break
-            else:
-                get_and_store_html(line, driver, idx, directory)
+        idx = start
+        lines = f.readlines()[start-1:end]
+        for line in lines:
+            get_and_store_html(line, driver, idx, directory)
+            idx += 1
 
 
 if __name__ == "__main__":
