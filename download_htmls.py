@@ -1,15 +1,12 @@
-from bs4 import BeautifulSoup
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.firefox import GeckoDriverManager
 import os
 
 
-
-
 def create_file_name(idx, directory):
     return directory+'article_'+str(idx)+'.html'
+
 
 def get_and_store_html(line, driver, idx, directory):
     url = line.strip()
@@ -32,10 +29,11 @@ if __name__ == "__main__":
     directory = os.getcwd()+'\htmls\\'
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
-    run_html_downloader(driver, 5, 10, directory)
+    run_html_downloader(driver, 7, 7500, directory)
 
-
-
+    # Manuel start = 1, end = 7499
+    # Timea start = 7500, end = 1499
+    # Iman start = 15000, end = 30000
 
 
 

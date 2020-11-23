@@ -1,9 +1,7 @@
 from bs4 import BeautifulSoup
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.firefox import GeckoDriverManager
-import time
 
 
 def get_one_page_urls(driver, url_prefix):
