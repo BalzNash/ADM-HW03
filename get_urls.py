@@ -15,10 +15,8 @@ def get_one_page_urls(driver, url_prefix):
     return temp_urls_list
 
 
-def get_all_pages_urls(target_page, pages_num):
+def get_all_pages_urls(target_page, pages_num, url_prefix, page_prefix):
     urls_list = []
-    url_prefix = 'https://www.goodreads.com'
-    page_prefix = 'https://www.goodreads.com/list/show/1.Best_Books_Ever?page='
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
     for i in range(pages_num):
         driver.get(target_page)
@@ -34,6 +32,8 @@ def store_in_txt(urls, file_name):
         
 if __name__ == "__main__":
     target_page = 'https://www.goodreads.com/list/show/1.Best_Books_Ever'
+    url_prefix = 'https://www.goodreads.com'
+    page_prefix = 'https://www.goodreads.com/list/show/1.Best_Books_Ever?page='
     
-    urls = get_all_pages_urls(target_page, 300)
+    urls = get_all_pages_urls(target_page, 300, url_prefix, page_prefix)
     store_in_txt(urls,'books_urls.txt')
