@@ -1,56 +1,73 @@
 from bs4 import BeautifulSoup
-import codecs
+from bs4 import NavigableString
 
 
 def get_bookTitle(page_source):
     bookTitle = page_source.find_all('h1', id='bookTitle')[0].contents
+    assert len(bookTitle) == 1, 'LEN > 1'
     bookTitle = "".join(bookTitle).strip()
     return bookTitle
 
-def get_bookSeries():
+def get_bookSeries(page_source):
     #Timea
-    pass
+    return "tbd"
 
-def get_bookAuthors():
+def get_bookAuthors(page_source):
     #Timea
-    pass
+    return "tbd"
 
-def get_ratingValue():
+def get_ratingValue(page_source):
     #Timea
-    pass
+    return "tbd"
 
-def get_ratingCount():
+def get_ratingCount(page_source):
     #Iman
-    pass
+    return "tbd"
 
-def get_reviewCount():
+def get_reviewCount(page_source):
     #Iman
-    pass
+    return "tbd"
 
-def get_plot():
-    #Manuel
-    #check language
-    pass
 
-def get_numberOfPages():
+def get_plot(page_source):
+    description_box = page_source.select("div[id=descriptionContainer]")[0]
+    plot_and_comment = description_box.find_all('span')[-1]
+    plot = ''
+    for i in plot_and_comment:
+        if isinstance(i, NavigableString):
+            plot +=' '+i
+    return plot.strip()
+
+
+def get_numberOfPages(page_source):
     #Iman
-    pass
+    return "tbd"
 
-def get_publishingDate():
+def get_publishingDate(page_source):
     #Iman
-    pass
+    return "tbd"
 
-def get_characters():
-    #Manuel
-    pass
 
-def get_setting():
-    #Manuel
-    pass
+def get_characters(page_source):
+    bookDataBox = page_source.select("div[class=buttons] > div[id=bookDataBox]")[0]
+    characters = bookDataBox.find_all("a", href=lambda value: value.startswith("/characters"))
+    characters = [i.text for i in characters]
+    return characters if characters != [] else False
 
-def get_url():
-    #Manuel
-    pass
+
+def get_setting(page_source):
+    if page_source.select("div[class=buttons] > div[id=bookDataBox] > div[class=infoBoxRowTitle]") == []:
+        return False
+    else:
+        setting_box = page_source.select("div[class=buttons] > div[id=bookDataBox] > div[class=infoBoxRowItem]")[0]
+        setting = setting_box.find_all("a", href=lambda value: value.startswith("/places"))
+        setting = [i.text for i in setting]
+        return setting
+
+
+def get_url(page_source):
+    url = page_source.find_all('link', rel='canonical')[0]['href']
+    return url
 
 
 field_function_map = {'bookTitle': get_bookTitle,
@@ -86,8 +103,9 @@ def get_field_values(page_source, field_function_map):
     field_values = []
     for item in field_function_map:
         field_values.append(field_function_map[item](page_source)) #call function for each field
-    if field_values[6] == False:
-        pass
+    return field_values
+    #if field_values[6] == False:
+    #    pass
         #do nothing
     #else:
          #write .tsv file
@@ -95,11 +113,12 @@ def get_field_values(page_source, field_function_map):
 
 
 if __name__ == "__main__":
+
+    for i in range(1):
+        page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+        field_values = get_field_values(page_source, field_function_map)
+        for i in field_values:
+            print(i)
     
-    book_fields = []
-    for i in range(100):
-        open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-        source = open_and_read_html('./htmls//article_1.html')
-        bookTitle = get_bookTitle(source)
-        book_fields.append(bookTitle)
-    print(book_fields)
+
+ 
