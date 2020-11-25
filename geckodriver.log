@@ -254,3 +254,29 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 1606127263277	Marionette	INFO	Listening on port 52034
 1606127263438	Marionette	WARN	TLS certificate errors will be ignored for this session
 JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+1606130049856	Marionette	INFO	Stopped listening on port 52034
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1606138761530	geckodriver	INFO	Listening on 127.0.0.1:49794
+1606138764541	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\manue\\AppData\\Local\\Temp\\rust_mozprofilekfrwfc"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606138767514	Marionette	INFO	Listening on port 49806
+1606138767720	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+JavaScript error: https://s.gr-assets.com/assets/desktop/libraries-fedbf6e14cf39d43205f9973c3bdce09.js line 157 > eval, line 1: TypeError: this.options is undefined
+JavaScript error: https://s.gr-assets.com/assets/desktop/libraries-fedbf6e14cf39d43205f9973c3bdce09.js line 157 > eval, line 1: TypeError: this.options is undefined
+JavaScript error: https://platform.twitter.com/widgets/widget_iframe.96fd96193cc66c3e11d4c5e4c7c7ec97.html?origin=https%3A%2F%2Fwww.goodreads.com, line 12: Error: Network error.
+Marionette threw an error: TypeError: driver.dialogObserver is null
+waitForNavigationCompleted/<@chrome://marionette/content/navigate.js:364:5
+
+1606153175332	Marionette	INFO	Stopped listening on port 49806
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
