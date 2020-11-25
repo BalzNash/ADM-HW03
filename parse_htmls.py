@@ -3,14 +3,13 @@ from bs4 import NavigableString
 
 
 def get_bookTitle(page_source):
-    bookTitle = page_source.find_all('h1', id='bookTitle')[0].contents
-    assert len(bookTitle) == 1, 'LEN > 1'
-    bookTitle = "".join(bookTitle).strip()
-    return bookTitle
+    bookTitle = page_source.find_all('h1', id='bookTitle')[0]
+    return bookTitle.text.strip()
 
 def get_bookSeries(page_source):
-    #Timea
-    return "tbd"
+    #returns and empty string when there's no bookseries
+    book_series = page_source.find_all('h2', id='bookSeries')[0]
+    return book_series.text.strip()
 
 def get_bookAuthors(page_source):
     #Timea
