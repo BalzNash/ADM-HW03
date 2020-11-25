@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from bs4 import NavigableString
+from langdetect import detect
 
 
 def replace_all(text, dic):
@@ -41,18 +42,22 @@ def get_reviewCount(page_source):
 
 
 def get_plot(page_source):
+    #Todo: handle missing plot
     description_box = page_source.select("div[id=descriptionContainer]")[0]
     plot_and_comment = description_box.find_all('span')[-1]
     plot = ''
     for i in plot_and_comment:
         if isinstance(i, NavigableString):
             plot +=' '+i
-    return plot.strip()
+    plot = plot.strip()
+    if detect(plot) != 'en':
+        return False
+    return plot
 
 
 def get_numberOfPages(page_source):
-    numberOfPages = int(page_source.find('span',{'itemprop':'numberOfPages'}).contents[0].split()[0])
-    return numberOfPages
+    numberOfPages = page_source.find('span',{'itemprop':'numberOfPages'}).contents[0].split()[0]
+    return int(numberOfPages)
 
 
 def get_publishingDate(page_source):
