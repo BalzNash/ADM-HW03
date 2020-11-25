@@ -8,37 +8,48 @@ def get_bookTitle(page_source):
     return bookTitle
 
 def get_bookSeries():
+    #Timea
     pass
 
 def get_bookAuthors():
+    #Timea
     pass
 
 def get_ratingValue():
+    #Timea
     pass
 
 def get_ratingCount():
+    #Iman
     pass
 
 def get_reviewCount():
+    #Iman
     pass
 
 def get_plot():
+    #Manuel
     #check language
     pass
 
 def get_numberOfPages():
+    #Iman
     pass
 
 def get_publishingDate():
+    #Iman
     pass
 
 def get_characters():
+    #Manuel
     pass
 
 def get_setting():
+    #Manuel
     pass
 
 def get_url():
+    #Manuel
     pass
 
 
