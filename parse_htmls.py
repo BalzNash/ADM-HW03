@@ -2,30 +2,42 @@ from bs4 import BeautifulSoup
 from bs4 import NavigableString
 
 
+def replace_all(text, dic):
+    for i, j in dic.items():
+        text = text.replace(i,j)
+    return text
+
+
 def get_bookTitle(page_source):
     bookTitle = page_source.find_all('h1', id='bookTitle')[0]
     return bookTitle.text.strip()
 
+
 def get_bookSeries(page_source):
     #returns and empty string when there's no bookseries
+    replace_dict = {'(': "", ')': ""}
     book_series = page_source.find_all('h2', id='bookSeries')[0]
-    return book_series.text.strip()
+    return replace_all(book_series.text.strip(), replace_dict)
+
 
 def get_bookAuthors(page_source):
     #Timea
     return "tbd"
 
+
 def get_ratingValue(page_source):
     #Timea
     return "tbd"
 
+
 def get_ratingCount(page_source):
-    #Iman
-    return "tbd"
+    ratingCount = page_source.find('meta',{'itemprop':'ratingCount'})['content']
+    return int(ratingCount)
+
 
 def get_reviewCount(page_source):
-    #Iman
-    return "tbd"
+    reviewCount = page_source.find('meta',{'itemprop':'reviewCount'})['content']
+    return int(reviewCount)
 
 
 def get_plot(page_source):
@@ -39,12 +51,18 @@ def get_plot(page_source):
 
 
 def get_numberOfPages(page_source):
-    #Iman
-    return "tbd"
+    numberOfPages = int(page_source.find('span',{'itemprop':'numberOfPages'}).contents[0].split()[0])
+    return numberOfPages
+
 
 def get_publishingDate(page_source):
-    #Iman
-    return "tbd"
+    publishingDate = page_source.find('div',{'class':'row'}).find_next_sibling()
+    if publishingDate.find_all('nobr') != []:
+        publishingDate = publishingDate.find('nobr').text
+        replace_dict = {'\n': "", '(': "", ')': ""}
+        return replace_all(publishingDate, replace_dict).strip().split()[2:]
+    else:
+        return publishingDate.contents[0].split()[1:4]
 
 
 def get_characters(page_source):
@@ -113,11 +131,12 @@ def get_field_values(page_source, field_function_map):
 
 if __name__ == "__main__":
 
-    for i in range(1):
-        page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-        field_values = get_field_values(page_source, field_function_map)
-        for i in field_values:
-            print(i)
+     for i in range(1):
+         page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+         field_values = get_field_values(page_source, field_function_map)
+         for i in field_values:
+             print(i)
+
     
 
  
