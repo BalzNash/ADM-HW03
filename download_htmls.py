@@ -29,11 +29,7 @@ if __name__ == "__main__":
     directory = os.getcwd()+'\htmls\\'
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
-    run_html_downloader(driver, 899, 899, directory)
-
-    # Manuel start = 1, end = 7499
-    # Timea start = 7500, end = 1499
-    # Iman start = 15000, end = 30000
+    run_html_downloader(driver, 1, 30000, directory)
 
 
 
