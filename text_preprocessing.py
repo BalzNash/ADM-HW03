@@ -15,8 +15,9 @@ def get_plot_from_tsv(file_name):
 
 cwd = os.getcwd()
 plot = get_plot_from_tsv(cwd+'\\tsvs\\article_1.tsv')
+lower_case_plot = plot.lower()
 tokenizer = nltk.RegexpTokenizer(r"\w+")
-tokens = tokenizer.tokenize(plot)
+tokens = tokenizer.tokenize(lower_case_plot)
 tokens_without_sw = [word for word in tokens if not word in stopwords.words()]
 print(tokens_without_sw)
 
