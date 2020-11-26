@@ -5,6 +5,12 @@ import os
 import csv
 import re
 
+#TO_DO: 
+
+# implement get_bookAuthors and get_ratingValues
+# test and improve the other parsing functions (see comments before the function)
+# remove all tabulations from the parsing functions output (they might cause problems when stored in tsv)
+
 
 #--------------------------------- HELPER FUNCTIONS ---------------------------------
 
