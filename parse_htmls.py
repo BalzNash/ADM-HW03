@@ -42,8 +42,8 @@ def get_bookSeries(page_source):
 
 
 def get_bookAuthors(page_source):
-    #should be present in any book
-    return "tbd"
+    page_source = str(page_source)
+    return re.search("<title>.*by (.*)</title>.*", page_source).group(1)
 
 
 def get_ratingValue(page_source):
@@ -99,7 +99,7 @@ def get_publishingDate(page_source):
 
 
 def get_characters(page_source):
-    # should be working, what happens if the characters are missing?
+    # should be working
     bookDataBox = page_source.select("div[class=buttons] > div[id=bookDataBox]")[0]
     characters = bookDataBox.find_all("a", href=lambda value: value.startswith("/characters"))
     characters = [i.text for i in characters]
@@ -198,7 +198,12 @@ def write_tsv_files(field_values, idx, dic):
 
 if __name__ == "__main__":
     
-    for i in range(10):
-         page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-         field_values = get_field_values(page_source, field_function_map)
-         write_tsv_files(field_values, i+1, field_function_map)
+    #for i in range(10):
+         #page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+         #field_values = get_field_values(page_source, field_function_map)
+         #write_tsv_files(field_values, i+1, field_function_map)
+    for i in range(25000, 26000):
+        page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+        authors = get_characters(page_source)
+        print(str(i+1) +" "+ str(authors))
+
