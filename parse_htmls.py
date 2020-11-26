@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 from bs4 import NavigableString
 from langdetect import detect
+import os
+import csv
 
 
 def replace_all(text, dic):
@@ -126,22 +128,35 @@ def get_field_values(page_source, field_function_map):
     for item in field_function_map:
         field_values.append(field_function_map[item](page_source)) #call function for each field
     return field_values
-    #if field_values[6] == False:
-    #    pass
-        #do nothing
-    #else:
-         #write .tsv file
-    #return field_values
+
+
+def create_file_name(directory, idx_start):
+    return directory+'article_'+str(idx_start)+'.tsv'
+
+
+def write_tsv_files(field_values, idx_start, dic):
+    directory = os.getcwd()+'\\tsvs\\'
+    if field_values[6] == 'NotEnglish':
+            pass
+    else:
+        with open(create_file_name(directory, idx_start), 'w') as g:
+            headers = dic.keys()
+            tsv_writer = csv.writer(g, delimiter='\t')
+            tsv_writer.writerow(headers)
+            tsv_writer.writerow(field_values)
+
 
 
 if __name__ == "__main__":
 
-     for i in range(1):
+     """ for i in range(5):
          page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
          field_values = get_field_values(page_source, field_function_map)
-         for i in field_values:
-             print(i)
+         write_tsv_files(field_values, i+1, field_function_map)
+ """
 
-    
+for i in range(1000):
+    page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+    print(str(i+1) + str(get_publishingDate(page_source)))
 
  
