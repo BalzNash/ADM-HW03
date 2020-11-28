@@ -7,6 +7,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 import os
+import pickle
 
 
 def get_plot_from_tsv(file_name):
@@ -48,15 +49,38 @@ def preprocess_text(seed):
     for func in [to_lowercase, tokenize_text, remove_stopwords, lemmatize_text]:
         seed = func(seed)
     return seed
-    
+
+
+def update_vocabulary(text, vocabulary):
+    for word in text:
+        if word not in vocabulary:
+            if not vocabulary:
+                idx = 1
+            else:
+                idx = max(vocabulary.values()) + 1
+            vocabulary[word] = idx
+    return vocabulary
+
+
+def save_vocabulary(vocabulary):
+    with open('vocabulary.pickle', 'wb') as g:
+        pickle.dump(vocabulary, g)
+
 
 tsv_folder = '\\tsvs\\'
 cwd = os.getcwd()
+vocabulary = {}
 
-
-for file_name in os.listdir(cwd+tsv_folder):
+""" for file_name in os.listdir(cwd+tsv_folder):
     plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
-    print(preprocess_text(plot))
+    preprocessed_plot = preprocess_text(plot)
+    vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
+save_vocabulary(vocabulary) """
+
+file = open("vocabulary.pickle",'rb')
+object_file = pickle.load(file)
+file.close()
+print(len(object_file))
 
 
 
