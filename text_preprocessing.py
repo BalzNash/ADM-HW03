@@ -4,6 +4,8 @@ from nltk.sem.logic import AllExpression
 #nltk.download('popular')
 #nltk.download('stopwords')
 from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
 import os
 
 
@@ -13,13 +15,51 @@ def get_plot_from_tsv(file_name):
         plot = all_fields[6]
     return plot
 
+
+def to_lowercase(text):
+    return text.lower()
+
+
+def tokenize_text(text):
+    tokenizer = nltk.RegexpTokenizer(r"\w+")
+    return tokenizer.tokenize(text)
+
+
+def remove_stopwords(tokenized_text):
+    return [word for word in tokenized_text if not word in stopwords.words()]
+
+
+def lemmatize_text(tokenized_text):
+    lemmatizer = WordNetLemmatizer()
+    
+    def get_wordnet_pos(word):
+        """Map POS tag to first character lemmatize() accepts"""
+        tag = nltk.pos_tag([word])[0][1][0].upper()
+        tag_dict = {"J": wordnet.ADJ,
+                "N": wordnet.NOUN,
+                "V": wordnet.VERB,
+                "R": wordnet.ADV}
+        return tag_dict.get(tag, wordnet.NOUN)
+
+    return [lemmatizer.lemmatize(word, get_wordnet_pos(word)) for word in tokenized_text]
+
+
+def preprocess_text(seed):
+    for func in [to_lowercase, tokenize_text, remove_stopwords, lemmatize_text]:
+        seed = func(seed)
+    return seed
+    
+
+tsv_folder = '\\tsvs\\'
 cwd = os.getcwd()
-plot = get_plot_from_tsv(cwd+'\\tsvs\\article_1.tsv')
-lower_case_plot = plot.lower()
-tokenizer = nltk.RegexpTokenizer(r"\w+")
-tokens = tokenizer.tokenize(lower_case_plot)
-tokens_without_sw = [word for word in tokens if not word in stopwords.words()]
-print(tokens_without_sw)
+
+
+for file_name in os.listdir(cwd+tsv_folder):
+    plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
+    print(preprocess_text(plot))
+
+
+
 
 
 
