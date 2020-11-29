@@ -67,11 +67,11 @@ def save_vocabulary(vocabulary):
         pickle.dump(vocabulary, g)
 
 
-tsv_folder = '\\tsvs\\'
+""" tsv_folder = '\\tsvs\\'
 cwd = os.getcwd()
 vocabulary = {}
 
-""" for file_name in os.listdir(cwd+tsv_folder):
+for file_name in os.listdir(cwd+tsv_folder):
     plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
     preprocessed_plot = preprocess_text(plot)
     vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
@@ -80,7 +80,7 @@ save_vocabulary(vocabulary) """
 file = open("vocabulary.pickle",'rb')
 object_file = pickle.load(file)
 file.close()
-print(len(object_file))
+print(object_file)
 
 
 

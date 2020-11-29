@@ -42,7 +42,6 @@ def get_bookSeries(page_source):
 
 
 def get_bookAuthors(page_source):
-    page_source = str(page_source)
     return [element.text for element in page_source.find_all('span', {'itemprop': 'name'})]
 
 
@@ -67,7 +66,7 @@ def get_plot(page_source):
     #      modify to return "" in case the plot is missing
     description_box = page_source.select("div[id=descriptionContainer]")[0]
     if description_box.find_all("span", id=re.compile(".")) == []:
-        return False
+        return ""
     else:
         plot = description_box.find_all("span", id=re.compile("."))[-1]
         plot = plot.text.strip()
@@ -109,13 +108,13 @@ def get_characters(page_source):
     bookDataBox = page_source.select("div[class=buttons] > div[id=bookDataBox]")[0]
     characters = bookDataBox.find_all("a", href=lambda value: value.startswith("/characters"))
     characters = [i.text for i in characters]
-    return characters if characters != [] else False
+    return characters if characters != [] else ""
 
 
 def get_setting(page_source):
     # should be working, how can we retrieve the word in parentheses (e.g. Paris (France))?
     if page_source.select("div[class=buttons] > div[id=bookDataBox] > div[class=infoBoxRowTitle]") == []:
-        return False
+        return ""
     else:
         setting_box = page_source.select("div[class=buttons] > div[id=bookDataBox] > div[class=infoBoxRowItem]")[0]
         setting = setting_box.find_all("a", href=lambda value: value.startswith("/places"))
@@ -190,7 +189,7 @@ def write_tsv_files(field_values, idx, dic):
     Returns:
         None, it only writes on the new file
     """
-    """ directory = os.getcwd()+'\\tsvs\\'
+    directory = os.getcwd()+'\\tsvs\\'
     if field_values[6] == 'NotEnglish':
         pass
     else:
@@ -198,19 +197,13 @@ def write_tsv_files(field_values, idx, dic):
             headers = dic.keys()
             tsv_writer = csv.writer(g, delimiter='\t')
             tsv_writer.writerow(headers)
-            tsv_writer.writerow(field_values) """
+            tsv_writer.writerow(field_values)
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     
-    #for i in range(10):
-         #page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-         #field_values = get_field_values(page_source, field_function_map)
-         #write_tsv_files(field_values, i+1, field_function_map)
-
     for i in range(30000):
         page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-        authors = get_ratingCount(page_source)
-        print(str(i+1) +" "+ str(authors))
-
+        field_values = get_field_values(page_source, field_function_map)
+        write_tsv_files(field_values, i+1, field_function_map)
