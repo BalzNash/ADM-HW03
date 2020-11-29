@@ -43,12 +43,11 @@ def get_bookSeries(page_source):
 
 def get_bookAuthors(page_source):
     page_source = str(page_source)
-    return re.search("<title>.*by (.*)</title>.*", page_source).group(1)
+    return [element.text for element in page_source.find_all('span', {'itemprop': 'name'})]
 
 
 def get_ratingValue(page_source):
-    #should be present in any book
-    return "tbd"
+    return page_source.find('span',{'itemprop':'ratingValue'}).text.strip()
 
 
 def get_ratingCount(page_source):
@@ -84,19 +83,26 @@ def get_numberOfPages(page_source):
         numberOfPages = numberOfPages.contents[0].split()[0]
         return int(numberOfPages)
     else:
-        return False
+        return ""
 
 
 def get_publishingDate(page_source):
     # should be working, check if there are anomalies (especially when there only one date), what happens if no date is present?
-    publishingDate = page_source.find('div',{'class':'row'}).find_next_sibling()
-    if publishingDate.find_all('nobr') != []:
-        publishingDate = publishingDate.find('nobr').text
-        replace_dict = {'\n': "", '(': "", ')': ""}
-        return replace_all(publishingDate, replace_dict).strip().split()[2:]
+    publishingDate_box = page_source.find('div',{'class':'row'})
+    if publishingDate_box is not None:
+        publishingDate = publishingDate_box.find_next_sibling()
+        print(publishingDate, type(publishingDate))
     else:
-        return publishingDate.contents[0].split()[1:4]
-
+        return ""
+    try:
+        if publishingDate.find_all('nobr') != []:
+            publishingDate = publishingDate.find('nobr').text
+            replace_dict = {'\n': "", '(': "", ')': ""}
+            return replace_all(publishingDate, replace_dict).strip().split()[2:]
+        else:
+            return publishingDate.contents[0].split()[1:4]
+    except AttributeError:
+        return ""
 
 def get_characters(page_source):
     # should be working
@@ -184,7 +190,7 @@ def write_tsv_files(field_values, idx, dic):
     Returns:
         None, it only writes on the new file
     """
-    directory = os.getcwd()+'\\tsvs\\'
+    """ directory = os.getcwd()+'\\tsvs\\'
     if field_values[6] == 'NotEnglish':
         pass
     else:
@@ -192,7 +198,7 @@ def write_tsv_files(field_values, idx, dic):
             headers = dic.keys()
             tsv_writer = csv.writer(g, delimiter='\t')
             tsv_writer.writerow(headers)
-            tsv_writer.writerow(field_values)
+            tsv_writer.writerow(field_values) """
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -202,8 +208,9 @@ if __name__ == "__main__":
          #page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
          #field_values = get_field_values(page_source, field_function_map)
          #write_tsv_files(field_values, i+1, field_function_map)
-    for i in range(25000, 26000):
+
+    for i in range(30000):
         page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-        authors = get_characters(page_source)
+        authors = get_ratingCount(page_source)
         print(str(i+1) +" "+ str(authors))
 
