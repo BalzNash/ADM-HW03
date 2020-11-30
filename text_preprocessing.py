@@ -67,20 +67,35 @@ def save_vocabulary(vocabulary):
         pickle.dump(vocabulary, g)
 
 
-""" tsv_folder = '\\tsvs\\'
-cwd = os.getcwd()
-vocabulary = {}
+def encode_plot(preprocessed_plot, vocabulary, idx, cwd):
+    encoded_plots_folder = '\\encoded_files\\'
+    dict_repr = {}
+    for token in preprocessed_plot:
+        dict_repr[vocabulary[token]] = dict_repr.get(vocabulary[token], 0) + 1
+    with open(cwd+encoded_plots_folder+str(idx)+".pickle", "wb") as h:
+        pickle.dump(dict_repr, h)
 
-for file_name in os.listdir(cwd+tsv_folder):
-    plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
-    preprocessed_plot = preprocess_text(plot)
-    vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
-save_vocabulary(vocabulary) """
 
-file = open("vocabulary.pickle",'rb')
-object_file = pickle.load(file)
-file.close()
-print(object_file)
+if __name__ == "__main__":
+
+    tsv_folder = '\\tsvs\\'
+    cwd = os.getcwd()
+    vocabulary = {}
+    idx = 1
+
+    for file_name in os.listdir(cwd+tsv_folder):
+        plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
+        preprocessed_plot = preprocess_text(plot)
+        vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
+        encode_plot(preprocessed_plot, vocabulary, idx, cwd)
+        print(idx)
+        idx += 1
+    save_vocabulary(vocabulary)
+
+    file = open(cwd+"\\encoded_files\\"+str(10)+".pickle",'rb')
+    object_file = pickle.load(file)
+    file.close()
+    print(object_file)
 
 
 
