@@ -82,20 +82,30 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     vocabulary = {}
     idx = 1
-
-    for file_name in os.listdir(cwd+tsv_folder):
+    
+    file_list = os.listdir(cwd+tsv_folder)
+    file_list = sorted(file_list, key=lambda x:int(os.path.splitext(x)[0][8:]))
+    for file_name in file_list[:100]:
         plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
         preprocessed_plot = preprocess_text(plot)
         vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
-        encode_plot(preprocessed_plot, vocabulary, idx, cwd)
+        encode_plot(preprocessed_plot, vocabulary, idx, cwd) #idx needs to be replaced with tsv file number
         print(idx)
-        idx += 1
+        idx += 1 # to be removed
     save_vocabulary(vocabulary)
 
-    file = open(cwd+"\\encoded_files\\"+str(10)+".pickle",'rb')
-    object_file = pickle.load(file)
-    file.close()
-    print(object_file)
+
+    
+    # with open(cwd+'\\tsvs\\'+'article_31.tsv', 'r', encoding = 'utf-8') as h:
+    #     all_fields = h.readlines()[2].split('\t')
+    #     plot = all_fields[6]
+    #     print(plot)
+    #     preprocessed_plot = preprocess_text('ones')
+    #     print(preprocessed_plot)
+        # dict_repr = {}
+        # for token in preprocessed_plot:
+        #     dict_repr[vocabulary[token]] = dict_repr.get(vocabulary[token], 0) + 1
+        # print(dict_repr)
 
 
 
