@@ -6,11 +6,13 @@ from text_preprocessing import preprocess_text
 def create_inverted_idx(cwd, encoded_files_folder):
     inverted_idx = {}
     #for file_name in os.listdir(cwd+encoded_files_folder):
-    for i in range(1,len(os.listdir(cwd+encoded_files_folder))):
-        with open(cwd+encoded_files_folder + str(i) +".pickle",'rb') as f:
+    file_list = os.listdir(cwd+encoded_files_folder)
+    file_list = sorted(file_list, key=lambda x:int(os.path.splitext(x)[0]))
+    for file_name in file_list:
+        with open(cwd+encoded_files_folder + file_name,'rb') as f:
             dict_repr = pickle.load(f)
             for key in dict_repr:
-                inverted_idx.setdefault(key, []).append(int(i))
+                inverted_idx.setdefault(key, []).append(int(file_name[:-7]))
     with open('inverted_idx.pickle', "wb") as g:
         pickle.dump(inverted_idx, g)
 

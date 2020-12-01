@@ -62,17 +62,21 @@ def get_reviewCount(page_source):
 
 
 def get_plot(page_source):
-    #Todo: find a better solution to handle missing plot, remove isbn, librarian notes, etc.
-    #      modify to return "" in case the plot is missing
     description_box = page_source.select("div[id=descriptionContainer]")[0]
     if description_box.find_all("span", id=re.compile(".")) == []:
         return ""
     else:
         plot = description_box.find_all("span", id=re.compile("."))[-1]
         plot = plot.text.strip()
-        if detect(plot) != 'en':
-            return "notEnglish"
-        return plot
+        try:
+            if detect(plot) != 'en':
+                return "notEnglish"
+            return plot
+        except:
+            if page_source.find('div', {'itemprop': "inLanguage"}).text != "English":
+                return "notEnglish"
+            else:
+                return ""
 
 
 def get_numberOfPages(page_source):
