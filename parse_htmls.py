@@ -94,7 +94,6 @@ def get_publishingDate(page_source):
     publishingDate_box = page_source.find('div',{'class':'row'})
     if publishingDate_box is not None:
         publishingDate = publishingDate_box.find_next_sibling()
-        print(publishingDate, type(publishingDate))
     else:
         return ""
     try:
