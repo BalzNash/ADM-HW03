@@ -71,6 +71,43 @@ def create_inverted_idx_2(cwd, encoded_files_folder):
     pass
 
 
+def store_tfidf_per_document(inverted_idx2):
+    docs = {}
+    for term in inverted_idx2:
+        for doc, tfidf in inverted_idx2[term]:
+            docs.setdefault(doc, []).append(tfidf)
+    for doc in docs:
+        docs[doc] = sum(docs[doc])
+    with open('tfidf_per_document.pickle', "wb") as g:
+        pickle.dump(docs,g)
+
+
+def search_engine_3(encoded_query, inverted_idx2):
+    result = []
+    docs_scores = {}
+    if not encoded_query:
+        return result
+    else:
+        selected_lists = [inverted_idx2[token] for token in encoded_query]
+        idx = [0] * len(selected_lists)
+        lists_len = [len(my_list) for my_list in selected_lists]
+        selected_lists2 = list(enumerate(selected_lists))
+        while all([k < m for k, m in zip(idx, lists_len)]):
+            max_num = max([docs[idx[list_num]][0] for list_num, docs in selected_lists2])
+            if all([docs[idx[list_num]][0] == max_num for list_num, docs in selected_lists2]):
+                docs_scores[max_num] = sum([docs[idx[list_num]][1] for list_num, docs in selected_lists2])
+                idx = [i+1 for i in idx]
+            else:
+                j = 0
+                for my_list in selected_lists:
+                    if my_list[idx[j]][0] == max_num:
+                        pass
+                    else:
+                        idx[j] += 1
+                    j += 1
+        return docs_scores
+
+
 if __name__ == "__main__":
     
     cwd = os.getcwd()
@@ -90,6 +127,9 @@ if __name__ == "__main__":
 
     query = input('enter your query:\n')
     preprocessed_query = preprocess_text(query)
+    print(preprocessed_query) # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     encoded_query = encode_query(preprocessed_query, vocabulary)
     print(search_engine(encoded_query, inverted_idx))
+    print(search_engine_3(encoded_query, inverted_idx2))
+    #print(store_tfidf_per_document(inverted_idx2))
 
