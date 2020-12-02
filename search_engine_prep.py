@@ -27,6 +27,17 @@ def encode_query(query, vocabulary):
     return encoded
 
 
+def print_search_engine_result(result):
+    for book in result:
+        with open(os.getcwd()+'\\tsvs\\'+'article_'+str(book)+'.tsv', 'r', encoding = 'utf-8') as f:
+            all_fields = f.readlines()[2].split('\t')
+            print("")
+            print(all_fields[0] + '\n')
+            print(all_fields[6] + '\n')
+            print(all_fields[-1] + '\n')
+    
+
+
 def search_engine(encoded_query, inverted_idx):
     result = []
     if not encoded_query:
@@ -85,7 +96,7 @@ def store_squared_tfidf_per_document(inverted_idx2):
 def compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document):
     similarity_scores = {}
     for doc in docs_scores:
-        cos_similarity = docs_scores[doc] * len(encoded_query) / (math.sqrt(squared_tfidf_per_document[doc]))
+        cos_similarity = docs_scores[doc] / ((math.sqrt(squared_tfidf_per_document[doc]))*(math.sqrt(len(encoded_query)))) 
         similarity_scores[doc] = cos_similarity
     return similarity_scores
 
@@ -116,9 +127,6 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document):
         return compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
 
 
-
-
-
 if __name__ == "__main__":
     
     cwd = os.getcwd()
@@ -145,9 +153,10 @@ if __name__ == "__main__":
 
     query = input('enter your query:\n')
     preprocessed_query = preprocess_text(query)
-    print(preprocessed_query) # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
+    #print(preprocessed_query) # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     encoded_query = encode_query(preprocessed_query, vocabulary)
-    print(search_engine(encoded_query, inverted_idx))
-    y = search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document)
-    print(max(y, key = y.get))
+    p = search_engine(encoded_query, inverted_idx)
+    #y = search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document)
+    #print(y)
+    print_search_engine_result(p)
 
