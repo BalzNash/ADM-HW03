@@ -85,7 +85,7 @@ if __name__ == "__main__":
     
     file_list = os.listdir(cwd+tsv_folder)
     file_list = sorted(file_list, key=lambda x:int(os.path.splitext(x)[0][8:]))
-    for file_name in file_list[:100]:
+    for file_name in file_list[:15000]:
         plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
         preprocessed_plot = preprocess_text(plot)
         vocabulary = update_vocabulary(preprocessed_plot, vocabulary)

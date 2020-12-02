@@ -71,18 +71,26 @@ def create_inverted_idx_2(cwd, encoded_files_folder):
     pass
 
 
-def store_tfidf_per_document(inverted_idx2):
+def store_squared_tfidf_per_document(inverted_idx2):
     docs = {}
     for term in inverted_idx2:
         for doc, tfidf in inverted_idx2[term]:
-            docs.setdefault(doc, []).append(tfidf)
+            docs.setdefault(doc, []).append(tfidf**2)
     for doc in docs:
         docs[doc] = sum(docs[doc])
-    with open('tfidf_per_document.pickle', "wb") as g:
+    with open('squared_tfidf_per_document.pickle', "wb") as g:
         pickle.dump(docs,g)
 
 
-def search_engine_3(encoded_query, inverted_idx2):
+def compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document):
+    similarity_scores = {}
+    for doc in docs_scores:
+        cos_similarity = docs_scores[doc] * len(encoded_query) / (math.sqrt(squared_tfidf_per_document[doc]))
+        similarity_scores[doc] = cos_similarity
+    return similarity_scores
+
+
+def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document):
     result = []
     docs_scores = {}
     if not encoded_query:
@@ -105,7 +113,10 @@ def search_engine_3(encoded_query, inverted_idx2):
                     else:
                         idx[j] += 1
                     j += 1
-        return docs_scores
+        return compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
+
+
+
 
 
 if __name__ == "__main__":
@@ -119,17 +130,24 @@ if __name__ == "__main__":
     with open('inverted_idx.pickle', 'rb') as h:
         inverted_idx = pickle.load(h)
     print(len(inverted_idx))
+    
     with open('inverted_idx2.pickle', 'rb') as h:
         inverted_idx2 = pickle.load(h)
     print(len(inverted_idx2))
+    
     with open('vocabulary.pickle', 'rb') as q:
         vocabulary = pickle.load(q)
+
+    store_squared_tfidf_per_document(inverted_idx2)
+    
+    with open('squared_tfidf_per_document.pickle', "rb") as q:
+        squared_tfidf_per_document = pickle.load(q)
 
     query = input('enter your query:\n')
     preprocessed_query = preprocess_text(query)
     print(preprocessed_query) # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     encoded_query = encode_query(preprocessed_query, vocabulary)
     print(search_engine(encoded_query, inverted_idx))
-    print(search_engine_3(encoded_query, inverted_idx2))
-    #print(store_tfidf_per_document(inverted_idx2))
+    y = search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document)
+    print(max(y, key = y.get))
 
