@@ -2,7 +2,7 @@ import pickle
 import os
 from text_preprocessing import preprocess_text
 import math
-
+import heapq
 
 def create_inverted_idx(cwd, encoded_files_folder):
     inverted_idx = {}
@@ -32,9 +32,13 @@ def print_search_engine_result(result):
         with open(os.getcwd()+'\\tsvs\\'+'article_'+str(book)+'.tsv', 'r', encoding = 'utf-8') as f:
             all_fields = f.readlines()[2].split('\t')
             print("")
+            print('--BOOKTITLE--')
             print(all_fields[0] + '\n')
+            print('--PLOT--')
             print(all_fields[6] + '\n')
+            print('--URL--')
             print(all_fields[-1] + '\n')
+            print('----------------------------------------------------------------------------------------------' + '\n')
     
 
 
@@ -100,6 +104,26 @@ def compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_docu
         similarity_scores[doc] = cos_similarity
     return similarity_scores
 
+def get_top_k(dic):
+    heap = [(-value, key) for key,value in dic.items()]
+    largest = heapq.nsmallest(3, heap)
+    return [(key, -value) for value, key in largest]
+
+
+def print_search_engine_3_result(result):
+    for book, score in result:
+        with open(os.getcwd()+'\\tsvs\\'+'article_'+str(book)+'.tsv', 'r', encoding = 'utf-8') as f:
+            all_fields = f.readlines()[2].split('\t')
+            print("")
+            print('--BOOKTITLE--')
+            print(all_fields[0] + '\n')
+            print('--PLOT--')
+            print(all_fields[6] + '\n')
+            print('--URL--')
+            print(all_fields[-1] + '\n')
+            print('--SIMILARITY--')
+            print(round(score,2), '\n')
+            print('----------------------------------------------------------------------------------------------' + '\n')
 
 def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document):
     result = []
@@ -124,7 +148,8 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document):
                     else:
                         idx[j] += 1
                     j += 1
-        return compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
+        all_scores = compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
+        return get_top_k(all_scores)
 
 
 if __name__ == "__main__":
@@ -132,31 +157,32 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     encoded_files_folder = "\\encoded_files\\"
     
-    create_inverted_idx(cwd, encoded_files_folder)
-    create_inverted_idx_2(cwd, encoded_files_folder)
+    #create_inverted_idx(cwd, encoded_files_folder)
+    #create_inverted_idx_2(cwd, encoded_files_folder)
 
     with open('inverted_idx.pickle', 'rb') as h:
         inverted_idx = pickle.load(h)
-    print(len(inverted_idx))
     
     with open('inverted_idx2.pickle', 'rb') as h:
         inverted_idx2 = pickle.load(h)
-    print(len(inverted_idx2))
     
     with open('vocabulary.pickle', 'rb') as q:
         vocabulary = pickle.load(q)
 
-    store_squared_tfidf_per_document(inverted_idx2)
+    #store_squared_tfidf_per_document(inverted_idx2)
     
     with open('squared_tfidf_per_document.pickle', "rb") as q:
         squared_tfidf_per_document = pickle.load(q)
 
+
+    #for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     query = input('enter your query:\n')
     preprocessed_query = preprocess_text(query)
-    #print(preprocessed_query) # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     encoded_query = encode_query(preprocessed_query, vocabulary)
     p = search_engine(encoded_query, inverted_idx)
-    #y = search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document)
-    #print(y)
+    y = search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document)
     print_search_engine_result(p)
+    print(y)
+    print_search_engine_3_result(y)
+    
 
