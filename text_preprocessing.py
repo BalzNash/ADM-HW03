@@ -82,30 +82,20 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     vocabulary = {}
     
-    # file_list = os.listdir(cwd+tsv_folder)
-    # file_list = sorted(file_list, key=lambda x:int(os.path.splitext(x)[0][8:]))
-    # for file_name in file_list:
-    #     print(int(file_name[8:-4]))
-    #     plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
-    #     preprocessed_plot = preprocess_text(plot)
-    #     vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
-    #     encode_plot(preprocessed_plot, vocabulary, int(file_name[8:-4]), cwd)
-    # save_vocabulary(vocabulary)
+    file_list = os.listdir(cwd+tsv_folder)
+    file_list = sorted(file_list, key=lambda x:int(os.path.splitext(x)[0][8:]))
+    for file_name in file_list:
+        print(int(file_name[8:-4]))
+        plot = get_plot_from_tsv(cwd+tsv_folder+file_name)
+        preprocessed_plot = preprocess_text(plot)
+        vocabulary = update_vocabulary(preprocessed_plot, vocabulary)
+        encode_plot(preprocessed_plot, vocabulary, int(file_name[8:-4]), cwd)
+    save_vocabulary(vocabulary)
 
 
     
-    with open(cwd+'\\encoded_files\\'+'3.pickle', 'rb') as h:
-        print(pickle.load(h))
 
-
-
-
-
-#STEPS:
-#1. Remove duplicate whitespace
-#2. Remove punctuation and special characters (maybe do it before #1)
-#3. Capital letter removal
-#4. Remove stopwords
-#5. Stemming
+    # with open(cwd+'\\encoded_files\\'+'3.pickle', 'rb') as h:
+    #     print(pickle.load(h))
 
 
