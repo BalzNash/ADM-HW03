@@ -36,14 +36,14 @@ def get_bookTitle(page_source):
 
 def get_bookSeries(page_source):
     #returns and empty string when there's no bookseries
-    replace_dict = {'(': "", ')': ""}
+    replace_dict = {'(': "", ')': "", '\t': "", '\n': ""}
     book_series = page_source.find_all('h2', id='bookSeries')[0]
     return replace_all(book_series.text.strip(), replace_dict)
 
 
 def get_bookAuthors(page_source):
-    return [element.text for element in page_source.find_all('span', {'itemprop': 'name'})]
-
+    listOfAuthors = [element.text for element in page_source.find_all('span', {'itemprop': 'name'})]
+    return ", ".join(listOfAuthors)
 
 def get_ratingValue(page_source):
     return page_source.find('span',{'itemprop':'ratingValue'}).text.strip()
@@ -51,67 +51,92 @@ def get_ratingValue(page_source):
 
 def get_ratingCount(page_source):
     #should be present in any book
-    ratingCount = page_source.find('meta',{'itemprop':'ratingCount'})['content']
-    return int(ratingCount)
+    return page_source.find('meta',{'itemprop':'ratingCount'})['content']
 
 
 def get_reviewCount(page_source):
     #should be present in any book
-    reviewCount = page_source.find('meta',{'itemprop':'reviewCount'})['content']
-    return int(reviewCount)
+    return page_source.find('meta',{'itemprop':'reviewCount'})['content']
 
 
 def get_plot(page_source):
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The plot of the book
+
+    '''
+
+    # Selecting the main tag containing the plot
     description_box = page_source.select("div[id=descriptionContainer]")[0]
+
+    # The plot doesn't exist
     if description_box.find_all("span", id=re.compile(".")) == []:
         return ""
+
+    # The plot exists
     else:
-        plot = description_box.find_all("span", id=re.compile("."))[-1]
-        plot = plot.text.strip()
+
+        plot = str(description_box.find_all("span", id=re.compile("."))[-1])
+
+        # Cleaning the plot from all the tags
+        cleanr = re.compile('<.*?>')
+        plot = re.sub(cleanr, '', plot)
+
         try:
+            # Checking if book is not in English
             if detect(plot) != 'en':
                 return "notEnglish"
+
+            # Cleaning the plot from unneccessary characters and spaces
+            plot = plot.strip()
+
+            if plot.startswith("."):
+                plot = plot[1:]
+
             return plot
+
+        # Handling exceptions that are given by books not in English because land.detect doesn't detect all languages
         except:
-            if page_source.find('div', {'itemprop': "inLanguage"}).text != "English":
-                return "notEnglish"
-            else:
+            try:
+                if page_source.find('div', {'itemprop': "inLanguage"}).text != "English":
+                    return "notEnglish"
+                else:
+                    return ""
+            except:
                 return ""
+
 
 
 def get_numberOfPages(page_source):
     # modify to return "" in case the no. of pages is missing
     numberOfPages = page_source.find('span',{'itemprop':'numberOfPages'})
     if numberOfPages is not None:
-        numberOfPages = numberOfPages.contents[0].split()[0]
-        return int(numberOfPages)
+        return numberOfPages.contents[0].split()[0]
     else:
         return ""
 
 
 def get_publishingDate(page_source):
-    # should be working, check if there are anomalies (especially when there only one date), what happens if no date is present?
-    publishingDate_box = page_source.find('div',{'class':'row'})
-    if publishingDate_box is not None:
-        publishingDate = publishingDate_box.find_next_sibling()
-    else:
-        return ""
+    publishingDate = page_source.find('div', {'class': 'row'}).find_next_sibling()
+    replace_dict = {'\n': "", '(': "", ')': "", '\t': ""}
     try:
         if publishingDate.find_all('nobr') != []:
             publishingDate = publishingDate.find('nobr').text
-            replace_dict = {'\n': "", '(': "", ')': ""}
-            return replace_all(publishingDate, replace_dict).strip().split()[2:]
+            return " ".join(replace_all(publishingDate, replace_dict).strip().split()[2:])
         else:
-            return publishingDate.contents[0].split()[1:4]
-    except AttributeError:
+            return " ".join(replace_all(publishingDate.contents[0], replace_dict).split()[1:4])
+    except:
         return ""
 
+
 def get_characters(page_source):
-    # should be working
     bookDataBox = page_source.select("div[class=buttons] > div[id=bookDataBox]")[0]
     characters = bookDataBox.find_all("a", href=lambda value: value.startswith("/characters"))
     characters = [i.text for i in characters]
-    return characters if characters != [] else ""
+    return ", ".join(characters) if characters != [] else ""
 
 
 def get_setting(page_source):
@@ -122,7 +147,7 @@ def get_setting(page_source):
         setting_box = page_source.select("div[class=buttons] > div[id=bookDataBox] > div[class=infoBoxRowItem]")[0]
         setting = setting_box.find_all("a", href=lambda value: value.startswith("/places"))
         setting = [i.text for i in setting]
-        return setting
+        return " ".join(setting)
 
 
 def get_url(page_source):
@@ -174,9 +199,11 @@ def get_field_values(page_source, field_function_map):
     Returns:
         list: list of retrieved fields
     """
+    replace_dict = {'\n': "", '\t': ""}
     field_values = []
     for item in field_function_map:
-        field_values.append(field_function_map[item](page_source)) #call function for each field
+        field_value = replace_all(field_function_map[item](page_source), replace_dict)
+        field_values.append(field_value)
     return field_values
 
 
@@ -206,7 +233,12 @@ def write_tsv_files(field_values, idx, dic):
 
 if __name__ == "__main__":
     
-    for i in range(30000):
-        page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-        field_values = get_field_values(page_source, field_function_map)
-        write_tsv_files(field_values, i+1, field_function_map)
+    # for i in range(29000, 29100):
+    #     page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+    #     field_values = get_field_values(page_source, field_function_map)
+    #     write_tsv_files(field_values, i+1, field_function_map)
+    #     print(i+1)
+
+    with open('./tsvs//article_29096.tsv', 'r', encoding = 'utf-8') as f:
+        values = f.readlines()[2].split('\t')
+        print(len(values))
