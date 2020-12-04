@@ -34,7 +34,7 @@ def create_inverted_idx(cwd, encoded_files_folder) -> None:
 
 
 def create_inverted_idx_2(cwd, encoded_files_folder) -> None:
-    """Creates and stores a dictionary which maps from encoded words to all the documents containing that word + the relative tfidf score.
+    """Creates and stores a dictionary which maps from encoded words to all the documents containing that word + the corresponding tfidf score.
        Stores the output in a .pickle file and returns None.
 
     Args:
@@ -108,7 +108,7 @@ def encode_query(query, vocabulary):
         else:
             return False
     return encoded
-    
+
 
 def get_top_k(dic):
     """[summary] TODO add description
@@ -265,8 +265,8 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
 
 def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, uncoded_query):
     """Uses search engine 2 to get only the documents with a plot containing the query,
-       prompts the user to specify new info, related to the other book fields (e.g. bookTitle, setting, etc.),
-       adjusts the cosine similarity #TODO complete description
+       then prompts the user to specify new info, related to the other book fields (e.g. bookTitle, setting, etc.),
+       adjusts the score based on the new info #TODO complete description
 
 
     Args:
