@@ -70,7 +70,7 @@ def store_squared_tfidf_per_document(inverted_idx2) -> None:
        stores a dictionary with the documents as keys, and the squared sum as values. 
 
     Args:
-        inverted_idx2 (dict)
+        inverted_idx2 (dict): the inverted index with tfidf scores
     """
     squared_tfidfs = {}
     
@@ -148,6 +148,7 @@ def compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_docu
 
 #------------------------------------------------------------PRINT FUNCTIONS-----------------------------------------------------------
 
+
 def print_search_engine_result(result):
     """Prints the first search engine results,
        Fetching the data from tsv files.
@@ -192,6 +193,7 @@ def print_search_engine_2_result(result):
 
 #------------------------------------------------------------SEARCH ENGINES---------------------------------------------------------------
 
+
 def search_engine(encoded_query, inverted_idx):
     """[summary]
 
@@ -203,18 +205,27 @@ def search_engine(encoded_query, inverted_idx):
         [type]: [description]
     """
     result = []
+
     if not encoded_query:
         return result
-    else:
+    else:  
+        # selects only the list corresponding to the words that appear in the query
         selected_lists = [inverted_idx[token] for token in encoded_query]
-        idx = [0] * len(selected_lists)
+
+        idx = [0] * len(selected_lists) # start at index 0 for each list
         lists_len = [len(my_list) for my_list in selected_lists]
         selected_lists2 = list(enumerate(selected_lists))
+
+        # checks if any list index surpasses the last element
         while all([k < m for k, m in zip(idx, lists_len)]):
-            max_num = max([docs[idx[list_num]] for list_num, docs in selected_lists2])
+            max_num = max([docs[idx[list_num]] for list_num, docs in selected_lists2]) # get the max document number
+            
+            # handles the case when each list is pointing at the same value
             if all([docs[idx[list_num]] == max_num for list_num, docs in selected_lists2]):
                 result.append(max_num)
                 idx = [i+1 for i in idx]
+            
+            # handles all the other cases, increasing idx on all lists that are not pointing at the max value
             else:
                 j = 0
                 for my_list in selected_lists:
@@ -239,18 +250,27 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
     """
     result = []
     docs_scores = {}
+    
     if not encoded_query:
         return result
     else:
+        # selects only the list corresponding to the words that appear in the query 
         selected_lists = [inverted_idx2[token] for token in encoded_query]
-        idx = [0] * len(selected_lists)
+        
+        idx = [0] * len(selected_lists) # start at index 0 for each list
         lists_len = [len(my_list) for my_list in selected_lists]
-        selected_lists2 = list(enumerate(selected_lists))
+        selected_lists2 = list(enumerate(selected_lists)) # keep track of the list
+        
+        # checks if any list index surpasses the last element
         while all([k < m for k, m in zip(idx, lists_len)]):
-            max_num = max([docs[idx[list_num]][0] for list_num, docs in selected_lists2])
+            max_num = max([docs[idx[list_num]][0] for list_num, docs in selected_lists2])  # get the max document number
+            
+            # handles the case when each list is pointing at the same value
             if all([docs[idx[list_num]][0] == max_num for list_num, docs in selected_lists2]):
                 docs_scores[max_num] = sum([docs[idx[list_num]][1] for list_num, docs in selected_lists2])
                 idx = [i+1 for i in idx]
+            
+            # handles all the other cases, increasing idx on all lists that are not pointing at the max value
             else:
                 j = 0
                 for my_list in selected_lists:
@@ -259,6 +279,7 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
                     else:
                         idx[j] += 1
                     j += 1
+        
         all_scores = compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
         return get_top_k(all_scores)
 
@@ -267,7 +288,6 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
     """Uses search engine 2 to get only the documents with a plot containing the query,
        then prompts the user to specify new info, related to the other book fields (e.g. bookTitle, setting, etc.),
        adjusts the score based on the new info #TODO complete description
-
 
     Args:
         encoded_query (list): a textual query, encoded in integer
@@ -318,6 +338,9 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
     return final_score
 
 
+#--------------------------------------------------------------------------------------------------------------------
+
+
 if __name__ == "__main__":
     
     cwd = os.getcwd()
@@ -341,7 +364,7 @@ if __name__ == "__main__":
         squared_tfidf_per_document = pickle.load(q)
 
 
-    #for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
+    # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     query = input('enter your query:\n')
     preprocessed_query = preprocess_text(query)
     encoded_query = encode_query(preprocessed_query, vocabulary)
@@ -350,6 +373,5 @@ if __name__ == "__main__":
     print_search_engine_result(p)
     print(y)
     print_search_engine_2_result(y)
-    print(search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, preprocessed_query))
+    #print(search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, preprocessed_query))
     
-
