@@ -1,6 +1,4 @@
 *.log
 .pytest_cache/
 /htmls/*
-/tsvs/*
-/encoded_files/*
 find_missing_file.py
