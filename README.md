@@ -1,8 +1,8 @@
 # Homework 3 - Which book would you recomend?
 
 _Authors:_
-* _Manuel Balzan,_
-* _Mohammad Iman Sayyadzadeh and_
+* _Manuel Balzan_
+* _Mohammad Iman Sayyadzadeh_
 * _Adrienn Timea Aszalos_
 
 _for "Algorithmic Methods of Data Mining", "La Sapienza" University of Rome, MSc in Data Science, 2020-2021._
