@@ -16,7 +16,11 @@ Other tasks:
 * The search engines give the user the opportunity to do queries and perform metrics over the plots of the remaining 27 174 books.
 * The homework also contains a 2d plot of the first ten book series in order of appearance and an algorithmic question using dynamic programming.
 
+<br>
+
 For utter information please check the file **main.ipynb**.
+
+<br>
 
 In the folowwing lines you can find the **content of the repository**:
 * get_urls.py: using this code we get the URLs of the books from Goodreads website and store them in books_urls.txt.
@@ -27,7 +31,7 @@ In the folowwing lines you can find the **content of the repository**:
 * main.ipynb: is the main file containing the outputs of the exercises
 * parse_htmls.py: stores all the parsing functions perfomed for the html web scraping 
 * plot_book_series.py: contains the functions that generate the plot of the first ten book series in order of appearance (ex. 4)
-* search_engines.py: contains the three search engines
-* squared_tfidf_per_document.pickle: 
-* text_preprocessing.py:
-* vocabulary.pickle:
+* search_engines.py: contains the three search engines (**TO BE COMPLETED**)
+* squared_tfidf_per_document.pickle: (**TO BE COMPLETED**)
+* text_preprocessing.py: contains the pre-processing functions used to tokanize the plot for each book
+* vocabulary.pickle: stores the codifications of the words contained in every book plot
