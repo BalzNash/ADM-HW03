@@ -1,7 +1,8 @@
 # Homework 3 - Which book would you recommend?
 
-![alt text](https://github.com/BalzNash/ADM-HW03/blob/main/goodreads_logo.png "Logo Title Text 1")
+![alt text](https://github.com/BalzNash/ADM-HW03/blob/main/goodreads_logo.png "BookReads logo")
 
+<br>
 
 _Authors:_
 * _Manuel Balzan_
