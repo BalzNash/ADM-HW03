@@ -1,5 +1,8 @@
 # Homework 3 - Which book would you recommend?
 
+![alt text](https://github.com/BalzNash/ADM-HW03/blob/main/goodreads_logo.png "Logo Title Text 1")
+
+
 _Authors:_
 * _Manuel Balzan_
 * _Mohammad Iman Sayyadzadeh_
