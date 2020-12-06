@@ -4,6 +4,7 @@ _Authors:_
 * _Manuel Balzan_
 * _Mohammad Iman Sayyadzadeh_
 * _Adrienn Timea Aszalos_
+_For "La Sapienza" University of Rome, Master in Data Science, class 2020-2021_
 
 <br>
 <br>
