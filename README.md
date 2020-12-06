@@ -31,7 +31,8 @@ In the following lines you can find the **content of the repository**:
 
 
 **FOLDERS:**
-* _encoded_files_: contains all the pickle files that store the vectorized representation of the 27 174 English plots.  
+* _encoded_files_: contains all the pickle files that store the vectorized representation of the 27 174 English plots. 
+[_encoded_files_](../main/encoded_files)
 * _tsvs_: contains all the tsv files for the 27 174 English books.
 
 **.PY FILES:**
