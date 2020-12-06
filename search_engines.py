@@ -296,10 +296,9 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document, k)
 
 
 def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, uncoded_query):
-    """Uses search engine 2 to get only the documents with a plot containing the query,
+    """Uses search engine 2 to get the top 10 documents with with highest similarity to the query,
        then prompts the user to specify new info, related to the other book fields (e.g. bookTitle, setting, etc.),
-       adjusts the score based on the new info #TODO complete description
-
+       adjusts the score based on the new info and returns the top 3 books according to the new score
     Args:
         encoded_query (list): a textual query, encoded in integer
         inverted_idx2 (dict): the inverted index with tfidf scores
@@ -308,7 +307,6 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
 
     Returns:
         [dic]: the top k documents ranked by the new adjusted score
-        #TODO add top k function, improve score
     """
     
     # apply the second search engine (plot only)
@@ -316,24 +314,20 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
 
     additional_info = []
 
+    # maps each additional field to their position in the .tsv files
     field_to_idx = {
         'booktitle' : 0,
         'bookseries' : 1,
         'bookauthors' : 2,
-        'ratingvalue' : 3,
-        'ratingcount' : 4,
-        'reviewcount' : 5,
-        'numberofpages': 7,
         'publishingdate': 8,
         'characters' : 9,
         'setting' : 10
     }
 
-    numeric_fields = [3, 4, 5, 7]
-
+    # prompts the user to insert additional information
     while True:
         try:
-            info = input('insert additional_info:\n\n Insert field name followed by : and the value\n\n Type "end" when you are done').lower()
+            info = input('please insert additional_info:\n Insert field name followed by ":" and the value\n Type "end" when you are done\n').lower()
             
             if info == 'end':
                 break
@@ -342,38 +336,31 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
 
             if info[0] in field_to_idx:
                 additional_info.append(info)
+            else:
+                print('field not found, please try again\n')
+
         except:
             print('field not found, please try again\n')
     
-
-    # define scores for each field of the book
-    scores = {
-        0: 1/2,   #BookTitle
-        1: 1/2,   #BookSeries
-        2: 1/2,   #BookAuthors
-        3: 1/2,   #RatingValue
-        4: 1/2,   #RatingCount
-        5: 1/2,   #ReviewCount
-        6: 0,     #Plot
-        7: 1/2,   #NumberOfPages
-        8: 1/2,   #PublishingDate
-        9: 1/2,   #Characters
-        10: 1/2,  #Setting
-        11: 0     #URL
-    }
-    
     final_score = {}
 
-    # Iterates over each book, and adjust the score for each of them based on the other fields
+    # Iterates over each book from the second search engine output
     for doc, score in plot_result:
         total_score = score
+        
         with open('.\\tsvs\\article_'+str(doc)+'.tsv', 'r', encoding = 'utf-8') as f:
             all_fields = f.readlines()[2].split('\t')
             all_fields = [preprocess_text(field) for field in all_fields]     
+            
+            # iterates over each additional info and if it matches, adjusts the score
             for item in additional_info:
                 if item[1] in all_fields[field_to_idx[item[0]]]:
                     total_score += total_score * 1/2
+        
+        # final score for each document
         final_score[doc] = total_score
+    
+    # return the top 3 documents based on the new scoring
     return get_top_k(final_score, 3)
 
 
@@ -405,14 +392,11 @@ if __name__ == "__main__":
         squared_tfidf_per_document = pickle.load(q)
 
 
-    # for query ('could', 'one') the preprocessing function returns only 'could' (remove stopwords probably) so the search engine incorrectly uses only 'could'
     query = input('enter your query:\n')
     preprocessed_query = preprocess_text(query)
     encoded_query = encode_query(preprocessed_query, vocabulary)
-    p = search_engine(encoded_query, inverted_idx)
-    y = search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document, 5)
-    #print_search_engine_result(p)
-    #print(y)
-    print_search_engine_2_result(y)
-    print(search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, preprocessed_query))
+    
+    print_search_engine_result(search_engine(encoded_query, inverted_idx))
+    print_search_engine_2_result(search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document, 5))
+    print_search_engine_2_result(search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, preprocessed_query))
     
