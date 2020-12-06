@@ -26,12 +26,12 @@ For utter information please check the file **main.ipynb**.
 
 In the following lines you can find the **content of the repository**:
 * _encoded_files_: (**TO BE COMPLETED**)
-* _tsvs_: contains all the tsv files for the 27174 English books 
-* _get_urls.py_: using this code we get the URLs of the books from Goodreads website and store them in books_urls.txt.
+* _tsvs_: contains all the tsv files for the 27174 English books. 
+* _get_urls.py_: Using this code we got the URLs of the books from Goodreads website and stored them in books_urls.txt.
 * _books_urls.txt_: In this file, we collected the URLs of all the books in the first 300 pages of the "best books ever" list.
-* _download_htmls.py_: Using this code we downloaded the HTML files of the books.
-* _inverted_idx.pickle_: This file is a dictionary that specifies for each word the document that the word is present.
-* _inverted_idx2.pickle_: This file is similar to inverted_idx, but it also contains the the relative tfIdf score for each document.
+* _download_htmls.py_: Using this code we downloaded the HTMLs of all the books.
+* _inverted_idx.pickle_: This file is a dictionary that For each word, specify the documents that contain that word.
+* _inverted_idx2.pickle_: This file is similar to inverted_idx.pickle, but it also contains the relative tfIdf score for each document.
 * _main.ipynb_: is the main file containing the outputs of the exercises
 * _parse_htmls.py_: stores all the parsing functions perfomed for the html web scraping 
 * _plot_book_series.py_: contains the functions that generate the plot of the first ten book series in order of appearance (ex. 4)
