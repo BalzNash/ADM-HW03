@@ -7,7 +7,7 @@ _Authors:_
 
 _for "Algorithmic Methods of Data Mining", "La Sapienza" University of Rome, MSc in Data Science, 2020-2021._
 
-<br>
+
 <br>
 
 The goal of the homework is to build a search engine over the "best books ever" list of GoodReads. Each book is downloaded as an html file and then parsed in order to retrieve important informations of the books, like the title, the authors, the publishing date and so on. There are a total of 30 000 html files downloaded and only the 27 174 English books are kept. 
