@@ -66,7 +66,7 @@ def create_inverted_idx_2(cwd, encoded_files_folder) -> None:
 
 
 def store_squared_tfidf_per_document(inverted_idx2) -> None:
-    """Computes the sum of the squared tfidf scores of a document,
+    """Computes the sum of the squared tfidf scores of a document ( |d| in the cosine similarity formula ),
        stores a dictionary with the documents as keys, and the squared sum as values. 
 
     Args:
@@ -234,6 +234,7 @@ def search_engine(encoded_query, inverted_idx):
                     else:
                         idx[j] += 1
                     j += 1
+        
         return result
 
 
@@ -259,13 +260,13 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
         
         idx = [0] * len(selected_lists) # start at index 0 for each list
         lists_len = [len(my_list) for my_list in selected_lists]
-        selected_lists2 = list(enumerate(selected_lists)) # keep track of the list
+        selected_lists2 = list(enumerate(selected_lists)) # enumerate each of our lists
         
-        # checks if any list index surpasses the last element
+        # checks if any list idx surpasses the last element
         while all([k < m for k, m in zip(idx, lists_len)]):
-            max_num = max([docs[idx[list_num]][0] for list_num, docs in selected_lists2])  # get the max document number
+            max_num = max([docs[idx[list_num]][0] for list_num, docs in selected_lists2])  # get the max document number between the selected ones
             
-            # handles the case when each list is pointing at the same value
+            # handles the case when each list is pointing at the same value -> add the document and its score to the result
             if all([docs[idx[list_num]][0] == max_num for list_num, docs in selected_lists2]):
                 docs_scores[max_num] = sum([docs[idx[list_num]][1] for list_num, docs in selected_lists2])
                 idx = [i+1 for i in idx]
@@ -280,7 +281,10 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
                         idx[j] += 1
                     j += 1
         
+        # computes the cosine similarity for each of the selected docs
         all_scores = compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
+        
+        # returns the top k documents ordered by cos similarity (using heaps)
         return get_top_k(all_scores)
 
 

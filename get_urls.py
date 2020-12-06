@@ -9,7 +9,7 @@ def get_one_page_urls(driver, url_prefix):
        parses a webpage and returns a list of the urls of the books in that page
 
     Args:
-        driver (selenium_webdriver): a webdriver pointing at a specific webpage
+        driver (selenium.webdriver): a webdriver pointing at a specific webpage
         url_prefix (str): prefix of the target books webpages
 
     Returns:

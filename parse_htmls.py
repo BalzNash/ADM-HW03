@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from bs4 import NavigableString
 from langdetect import detect
 import os
 import csv
@@ -233,12 +232,8 @@ def write_tsv_files(field_values, idx, dic):
 
 if __name__ == "__main__":
     
-    # for i in range(29000, 29100):
-    #     page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-    #     field_values = get_field_values(page_source, field_function_map)
-    #     write_tsv_files(field_values, i+1, field_function_map)
-    #     print(i+1)
-
-    with open('./tsvs//article_29096.tsv', 'r', encoding = 'utf-8') as f:
-        values = f.readlines()[2].split('\t')
-        print(len(values))
+    for i in range(30000):
+        page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+        field_values = get_field_values(page_source, field_function_map)
+        write_tsv_files(field_values, i+1, field_function_map)
+        print(i+1)
