@@ -9,6 +9,14 @@ def create_file_name(idx, directory):
 
 
 def get_and_store_html(line, driver, idx, directory):
+    """Opens a book webpage, gets the source code and stores it in an html file
+
+    Args:
+        line (str): URL of a single book
+        driver (selenium.webdriver): Firefox webriver
+        idx (int): book number
+        directory (str): directory where we want to store the html
+    """
     url = line.strip()
     driver.get(url)
     book_source = driver.page_source
@@ -17,6 +25,15 @@ def get_and_store_html(line, driver, idx, directory):
 
 
 def run_html_downloader(driver, start, end, directory):
+    """Opens the .txt containing all the books' URLs,
+       iterates over each of them and applies the 'get_and_store_html function to store their source code
+
+    Args:
+        driver (selenium.webdriver): Firefox webriver
+        start (int): first book number to consider
+        end (int): last book number to consider
+        directory (str): directory where we want to store the html
+    """
     with open('books_urls.txt', 'r') as f:
         idx = start
         lines = f.readlines()[start-1:end]
@@ -26,6 +43,7 @@ def run_html_downloader(driver, start, end, directory):
 
 
 if __name__ == "__main__":
+    
     directory = os.getcwd()+'\htmls\\'
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
