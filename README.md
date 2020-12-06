@@ -28,6 +28,7 @@ In the following lines you can find the **content of the repository**:
 
 **JUPYTER NOTEBOOKS:**
 * _main.ipynb_: is the main file containing the outputs of the exercises
+[_main.ipynb_](../blob/master/main.ipynb)
 
 **FOLDERS:**
 * _encoded_files_: contains all the pickle files that store the vectorized representation of the 27 174 English plots.  
