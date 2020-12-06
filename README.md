@@ -55,6 +55,6 @@ In the following lines you can find the **content of the repository**:
 
 **OTHERS:**
 * [_books_urls.txt_](../main/books_urls.txt): In this file, we collected the URLs of all the books in the first 300 pages of the "best books ever" list.
-* [_goodreads_logo.png_](../main/_goodreads_logo.png_): The logo of GoodReads
+* [_goodreads_logo.png_](../main/goodreads_logo.png): The logo of ["GoodReads"](https://www.goodreads.com)
 
 
