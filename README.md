@@ -20,7 +20,7 @@ Other tasks:
 
 <br>
 
-For utter information please check the file **main.ipynb**.
+For utter information please check the file **[_main.ipynb_](../main/main.ipynb)**.
 
 <br>
 
