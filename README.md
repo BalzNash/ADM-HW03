@@ -25,7 +25,7 @@ For utter information please check the file **main.ipynb**.
 <br>
 
 In the following lines you can find the **content of the repository**:
-* _encoded_files_: (**TO BE COMPLETED**)
+* _encoded_files_: contains the pickle files associated to the tsv files 
 * _tsvs_: contains all the tsv files for the 27 174 English books. 
 * _get_urls.py_: Using this code we got the URLs of the books from Goodreads website and stored them in books_urls.txt.
 * _books_urls.txt_: In this file, we collected the URLs of all the books in the first 300 pages of the "best books ever" list.
