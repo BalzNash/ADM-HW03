@@ -38,8 +38,3 @@ In the following lines you can find the **content of the repository**:
 * _text_preprocessing.py_: contains the pre-processing functions used to tokanize the plot for each book
 * _vocabulary.pickle_: stores the codifications of the words contained in every book plot
 
-
-<br>
-<br>
-***NOTE!!!
-The group decided not to store the html pages in folders since it was not helful and it didn't change the performance of the running code.
