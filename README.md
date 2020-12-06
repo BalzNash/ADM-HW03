@@ -1,4 +1,4 @@
-# Homework 3 - Which book would you recomend?
+# Homework 3 - Which book would you recommend?
 
 _Authors:_
 * _Manuel Balzan_
