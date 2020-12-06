@@ -2,5 +2,5 @@
 .pytest_cache/
 /htmls/*
 /tsvs/*
-find_missing_file.py
 /encoded_files/*
+find_missing_file.py
