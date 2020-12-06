@@ -24,22 +24,28 @@ For utter information please check the file **main.ipynb**.
 
 <br>
 
-In the following lines you can find the **content of the repository**:
+In the following lines you can find the **content of the repository**:_
 
 JUPYTER NOTEBOOKS:
 * _main.ipynb_: is the main file containing the outputs of the exercises_
 
+FOLDERS:
 * _encoded_files_: contains all the pickle files that store the vectorized representation of the 27 174 English plots.  
-* _tsvs_: contains all the tsv files for the 27 174 English books. 
+* _tsvs_: contains all the tsv files for the 27 174 English books. _
+
+.PY FILES:
 * _get_urls.py_: Using this code we retrieved the URLs of the books from Goodreads website and stored them in books_urls.txt.
-* _books_urls.txt_: In this file, we collected the URLs of all the books in the first 300 pages of the "best books ever" list.
 * _download_htmls.py_: Using this code we downloaded the HTMLs of all the books.
-* _text_preprocessing.py_: contains the pre-processing functions used to tokenize the plot for each book
-* _inverted_idx.pickle_: This file is a dictionary that for each word, specify the documents that contain that word.
-* _inverted_idx2.pickle_: This file is similar to inverted_idx.pickle, but it also contains the corresponding tfIdf score for each document.
 * _parse_htmls.py_: stores all the parsing functions perfomed for the html web scraping 
+* _text_preprocessing.py_: contains the pre-processing functions used to tokenize the plot for each book
 * _plot_book_series.py_: contains the functions that generate the plot of the first ten book series in order of appearance (ex. 4)
-* _search_engines.py_: contains the three search engines
+* _search_engines.py_: contains the three search engines_
+
+PICKLE DATA:
 * _squared_tfidf_per_document.pickle_: a dictionary that maps from each document to their |d| in the cos similarity formula 
 * _vocabulary.pickle_: stores the codifications of the words contained in every book plot
+* _inverted_idx.pickle_: This file is a dictionary that for each word, specify the documents that contain that word.
+* _inverted_idx2.pickle_: This file is similar to inverted_idx.pickle, but it also contains the corresponding tfIdf score for each document._
 
+OTHERS:
+* _books_urls.txt_: In this file, we collected the URLs of all the books in the first 300 pages of the "best books ever" list.
