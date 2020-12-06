@@ -1,27 +1,39 @@
 from bs4 import BeautifulSoup
-from bs4 import NavigableString
 from langdetect import detect
 import os
 import csv
 import re
-
-#TO_DO: 
-
-# implement get_bookAuthors and get_ratingValues
-# test and improve the other parsing functions (see comments before the function)
-# remove all tabulations from the parsing functions output (they might cause problems when stored in tsv)
 
 
 #--------------------------------- HELPER FUNCTIONS ---------------------------------
 
 
 def replace_all(text, dic):
+    '''
+
+    Args:
+        text: A string to be cleaned from unneccessary characters
+        dic: A dictionary containing all the characters that have to be replaced as keys and the strings that have to replace
+        the unwanted characters as values
+
+    Returns: A cleaned string from all the unwanted characters
+
+    '''    
     for i, j in dic.items():
         text = text.replace(i,j)
     return text
 
 
 def create_file_name(directory, idx_start):
+    '''
+
+    Args:
+        directory: Local directory
+        idx_start: Variable used for indexing
+
+    Returns: The path of the tsv file
+
+    '''
     return directory+'article_'+str(idx_start)+'.tsv'
 
 
@@ -29,33 +41,77 @@ def create_file_name(directory, idx_start):
 
 
 def get_bookTitle(page_source):
-    #should be present in any book
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The title of the book
+
+    '''
     bookTitle = page_source.find_all('h1', id='bookTitle')[0]
     return bookTitle.text.strip()
 
 
 def get_bookSeries(page_source):
-    #returns and empty string when there's no bookseries
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The book series if there is one, else an empty string
+
+    '''    
     replace_dict = {'(': "", ')': "", '\t': "", '\n': ""}
     book_series = page_source.find_all('h2', id='bookSeries')[0]
     return replace_all(book_series.text.strip(), replace_dict)
 
 
 def get_bookAuthors(page_source):
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The authors of the book
+
+    '''    
     listOfAuthors = [element.text for element in page_source.find_all('span', {'itemprop': 'name'})]
     return ", ".join(listOfAuthors)
 
 def get_ratingValue(page_source):
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The rating value of the book
+
+    '''    
     return page_source.find('span',{'itemprop':'ratingValue'}).text.strip()
 
 
 def get_ratingCount(page_source):
-    #should be present in any book
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The rating count of the book
+
+    '''    
     return page_source.find('meta',{'itemprop':'ratingCount'})['content']
 
 
 def get_reviewCount(page_source):
-    #should be present in any book
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The number of the reviews of the book
+
+    '''
     return page_source.find('meta',{'itemprop':'reviewCount'})['content']
 
 
@@ -65,7 +121,8 @@ def get_plot(page_source):
     Args:
         page_source: The link of the html book
 
-    Returns: The plot of the book
+    Returns: The plot of the book if it exists, else an empty string; If the plot is in English the function
+    return the string "notEnglish"
 
     '''
 
@@ -111,7 +168,14 @@ def get_plot(page_source):
 
 
 def get_numberOfPages(page_source):
-    # modify to return "" in case the no. of pages is missing
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The number of the pages of the book if it exists, else an empty string
+
+    '''
     numberOfPages = page_source.find('span',{'itemprop':'numberOfPages'})
     if numberOfPages is not None:
         return numberOfPages.contents[0].split()[0]
@@ -120,9 +184,18 @@ def get_numberOfPages(page_source):
 
 
 def get_publishingDate(page_source):
-    publishingDate = page_source.find('div', {'class': 'row'}).find_next_sibling()
-    replace_dict = {'\n': "", '(': "", ')': "", '\t': ""}
-    try:
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The first publishing date of the book if it exists, else an empty string
+
+    '''
+    try:    
+        publishingDate = page_source.find('div', {'class': 'row'}).find_next_sibling()
+        replace_dict = {'\n': "", '(': "", ')': "", '\t': ""}
+
         if publishingDate.find_all('nobr') != []:
             publishingDate = publishingDate.find('nobr').text
             return " ".join(replace_all(publishingDate, replace_dict).strip().split()[2:])
@@ -133,6 +206,14 @@ def get_publishingDate(page_source):
 
 
 def get_characters(page_source):
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The characters of the book if they exist, else an empty string
+
+    '''
     bookDataBox = page_source.select("div[class=buttons] > div[id=bookDataBox]")[0]
     characters = bookDataBox.find_all("a", href=lambda value: value.startswith("/characters"))
     characters = [i.text for i in characters]
@@ -140,7 +221,14 @@ def get_characters(page_source):
 
 
 def get_setting(page_source):
-    # should be working, how can we retrieve the word in parentheses (e.g. Paris (France))?
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The setting of the book if it exists, else an empty string
+
+    '''
     if page_source.select("div[class=buttons] > div[id=bookDataBox] > div[class=infoBoxRowTitle]") == []:
         return ""
     else:
@@ -151,13 +239,19 @@ def get_setting(page_source):
 
 
 def get_url(page_source):
-    # should be working, is it always present?
+    '''
+
+    Args:
+        page_source: The link of the html book
+
+    Returns: The url of the book
+
+    '''
     url = page_source.find_all('link', rel='canonical')[0]['href']
     return url
 
 
-# a dictionary that has all the fields to be parsed as keys, and the corresponding parsing functions as values
-
+# A dictionary that has all the fields to be parsed as keys, and the corresponding parsing functions as values
 field_function_map = {'bookTitle': get_bookTitle,
                       'bookSeries': get_bookSeries,
                       'bookAuthors': get_bookAuthors,
@@ -233,12 +327,8 @@ def write_tsv_files(field_values, idx, dic):
 
 if __name__ == "__main__":
     
-    # for i in range(29000, 29100):
-    #     page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
-    #     field_values = get_field_values(page_source, field_function_map)
-    #     write_tsv_files(field_values, i+1, field_function_map)
-    #     print(i+1)
-
-    with open('./tsvs//article_29096.tsv', 'r', encoding = 'utf-8') as f:
-        values = f.readlines()[2].split('\t')
-        print(len(values))
+    for i in range(30000):
+        page_source = open_and_read_html('./htmls//article_'+str(i+1)+'.html')
+        field_values = get_field_values(page_source, field_function_map)
+        write_tsv_files(field_values, i+1, field_function_map)
+        print(i+1)
