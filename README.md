@@ -5,9 +5,12 @@ _Authors:_
 * _Mohammad Iman Sayyadzadeh_
 * _Adrienn Timea Aszalos_
 
-
+<br>
+<br>
 
 The goal of the homework is to build a search engine over the "best books ever" list of GoodReads. Each book is downloaded as an html file and then parsed in order to retrieve important informations of the books, like the title, the authors, the publishing date and so on. There are a total of 30 000 html files downloaded and only the 27 174 English books are kept. 
+
+<br>
 
 Other tasks: 
 * The search engines give the user the opportunity to do queries and perform metrics over the plots of the remaining 27 174 books.
@@ -15,7 +18,7 @@ Other tasks:
 
 For utter information please check the file **main.ipynb**.
 
-In the folowwing lines you can find the content of the repository:
+In the folowwing lines you can find the **content of the repository**:
 * get_urls.py: using this code we get the URLs of the books from Goodreads website and store them in books_urls.txt.
 * books_urls.txt: In this file, we collected the URLs of all the books in the first 300 pages of the "best books ever" list.
 * download_htmls.py: Using this code we downloaded the HTML files of the books.
