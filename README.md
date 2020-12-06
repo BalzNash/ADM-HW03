@@ -10,7 +10,7 @@ _for "Algorithmic Methods of Data Mining", "La Sapienza" University of Rome, MSc
 
 <br>
 
-The goal of the homework is to build a search engine over the "best books ever" list of GoodReads. Each book is downloaded as an .html file and then parsed in order to retrieve important informations of the books, like the title, the authors, the publishing date and so on. There are a total of 30 000 .html files downloaded and only the 27 174 English books are kept. 
+The goal of the homework is to build a search engine over the ["best books ever"](https://www.goodreads.com/list/show/1.Best_Books_Ever?page=1) list of GoodReads. Each book is downloaded as an .html file and then parsed in order to retrieve important informations of the books, like the title, the authors, the publishing date and so on. There are a total of 30 000 .html files downloaded and only the 27 174 English books are kept. 
 
 <br>
 
@@ -22,7 +22,6 @@ Other tasks:
 
 For utter information please check the file **main.ipynb**.
 
-<br>
 <br>
 
 In the following lines you can find the **content of the repository**:
