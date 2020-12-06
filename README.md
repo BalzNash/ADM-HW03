@@ -26,7 +26,8 @@ For utter information please check the file **main.ipynb**.
 
 In the following lines you can find the **content of the repository**:
 
-* _main.ipynb_: is the main file containing the outputs of the exercises
+JUPYTER NOTEBOOKS:
+* _main.ipynb_: is the main file containing the outputs of the exercises_
 
 * _encoded_files_: contains all the pickle files that store the vectorized representation of the 27 174 English plots.  
 * _tsvs_: contains all the tsv files for the 27 174 English books. 
