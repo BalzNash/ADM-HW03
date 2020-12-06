@@ -111,16 +111,19 @@ def encode_query(query, vocabulary):
 
 
 def get_top_k(dic):
-    """[summary] TODO add description
+    """get top k items of a dictionary by value using heaps.
 
     Args:
-        dic ([type]): [description]
+        dic (dict): a dictionary
 
     Returns:
-        [type]: [description]
+        [type]: a list of the top k dict items by value 
     """
-    heap = [(-value, key) for key,value in dic.items()]
+    # convert the dictionary into a list of tuples, swapping key-values
+    heap = [(-value, key) for key,value in dic.items()] # we temporarily invert the values sign because heapq implements only a min heap
     largest = heapq.nsmallest(3, heap)
+    
+    # swap back key-values and values sign
     return [(key, -value) for value, key in largest]
 
 
@@ -195,14 +198,15 @@ def print_search_engine_2_result(result):
 
 
 def search_engine(encoded_query, inverted_idx):
-    """[summary]
+    """takes an encoded query and the inverted_idx, searches in the inverted_idx and
+       returns a list of the documents that contain all the tokens in the query
 
     Args:
-        encoded_query ([type]): [description]
-        inverted_idx ([type]): [description]
+        encoded_query (list): a textual query, encoded in integer
+        inverted_idx (dict): a mapping between encoded words (integers) and the documents that contain the word
 
     Returns:
-        [type]: [description]
+        [list]: a list of the documents that contain all the tokens in the query
     """
     result = []
 
@@ -239,15 +243,17 @@ def search_engine(encoded_query, inverted_idx):
 
 
 def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
-    """[summary]
+    """takes an encoded query the inverted_idx and the squared_tfidf per document,
+       searches in the inverted_idx2 and returns the top k documents that are most
+       similar to the query (and contain all tokens in the query).
 
     Args:
-        encoded_query ([type]): [description]
-        inverted_idx2 ([type]): [description]
-        squared_tfidf_per_document ([type]): [description]
+         encoded_query (list): a textual query, encoded in integer
+        inverted_idx2 (dict):  a mapping between encoded words (integers) and the documents that contain the word + their tfidf score
+        squared_tfidf_per_document (dict): a mapping between each document and the the sum of its squared tfidf scores for each word
 
     Returns:
-        [type]: [description]
+        [dict]: a dictionary of the top k documents that are most similar to the query
     """
     result = []
     docs_scores = {}
