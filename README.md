@@ -35,7 +35,7 @@ In the following lines you can find the **content of the repository**:
 * [_tsvs_](../main/tsvs) : contains all the tsv files for the 27 174 English books.
 
 **.PY FILES:**
-* [_get_urls.py_](../main/get_urls.py): Using this code we retrieved the URLs of the books from Goodreads website and stored them in books_urls.txt
+* [_get_urls.py_](../main/get_urls.py): Using this code we retrieved the URLs of the books from Goodreads website and stored them in [_books_urls.txt_](../main/books_urls.txt)
 * [_download_htmls.py_](../main/download_htmls.py): Using this code we downloaded the HTMLs of all the books
 * [_parse_htmls.py_](../main/parse_htmls.py): stores all the parsing functions perfomed for the html web scraping
 * [_text_preprocessing.py_](../main/text_preprocessing.py): contains the pre-processing functions used to tokenize the plot for each book
