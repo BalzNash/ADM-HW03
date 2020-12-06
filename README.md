@@ -5,7 +5,7 @@ _Authors:_
 * _Mohammad Iman Sayyadzadeh and_
 * _Adrienn Timea Aszalos_
 
-_for "La Sapienza" University of Rome, MSc in Data Science, class 2020-2021_
+_for "Algorithmic Methods of Data Mining", "La Sapienza" University of Rome, MSc in Data Science, 2020-2021_
 
 <br>
 <br>
