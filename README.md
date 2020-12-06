@@ -41,5 +41,5 @@ In the following lines you can find the **content of the repository**:
 
 <br>
 <br>
-###**NOTE!!!**
+### **NOTE!!!**
 The group decided not to store the html pages in folders since it was not helful and it didn't change the performance of the running code.
