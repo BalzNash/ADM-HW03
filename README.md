@@ -38,8 +38,8 @@ FOLDERS:
 * _download_htmls.py_: Using this code we downloaded the HTMLs of all the books.
 * _parse_htmls.py_: stores all the parsing functions perfomed for the html web scraping 
 * _text_preprocessing.py_: contains the pre-processing functions used to tokenize the plot for each book
-* _plot_book_series.py_: contains the functions that generate the plot of the first ten book series in order of appearance (ex. 4)
-* _search_engines.py_: contains the three search engines_
+* _search_engines.py_: contains the three search engines
+* _plot_book_series.py_: contains the functions that generate the plot of the first ten book series in order of appearance (ex. 4)_
 
 PICKLE DATA:
 * _squared_tfidf_per_document.pickle_: a dictionary that maps from each document to their |d| in the cos similarity formula 
