@@ -27,7 +27,7 @@ For utter information please check the file **main.ipynb**.
 In the following lines you can find the **content of the repository**:
 
 **JUPYTER NOTEBOOKS:**
-* [_main.ipynb_](../blob/main.ipynb): is the main file containing the outputs of the exercises
+* [_main.ipynb_](../main.ipynb): is the main file containing the outputs of the exercises
 
 
 
