@@ -31,14 +31,13 @@ In the following lines you can find the **content of the repository**:
 
 
 **FOLDERS:**
-* _encoded_files_: contains all the pickle files that store the vectorized representation of the 27 174 English plots. 
-[_encoded_files_](../main/encoded_files)
-* _tsvs_: contains all the tsv files for the 27 174 English books.
+* [_encoded_files_](../main/encoded_files): contains all the pickle files that store the vectorized representation of the 27 174 English plots. 
+* [_tsvs_](../main/tsvs) : contains all the tsv files for the 27 174 English books.
 
 **.PY FILES:**
-* _get_urls.py_: Using this code we retrieved the URLs of the books from Goodreads website and stored them in books_urls.txt.
-* _download_htmls.py_: Using this code we downloaded the HTMLs of all the books.
-* _parse_htmls.py_: stores all the parsing functions perfomed for the html web scraping 
+* [_get_urls.py_](../main/get_urls.py): Using this code we retrieved the URLs of the books from Goodreads website and stored them in books_urls.txt
+* [_download_htmls.py_](../main/download_htmls.py): Using this code we downloaded the HTMLs of all the books
+* [_parse_htmls.py_](../main/parse_htmls.py): stores all the parsing functions perfomed for the html web scraping
 * _text_preprocessing.py_: contains the pre-processing functions used to tokenize the plot for each book
 * _search_engines.py_: contains the three search engines
 * _plot_book_series.py_: contains the functions that generate the plot of the first ten book series in order of appearance (ex. 4)
