@@ -110,7 +110,7 @@ def encode_query(query, vocabulary):
     return encoded
 
 
-def get_top_k(dic):
+def get_top_k(dic, k):
     """get top k items of a dictionary by value using heaps.
 
     Args:
@@ -121,7 +121,7 @@ def get_top_k(dic):
     """
     # convert the dictionary into a list of tuples, swapping key-values
     heap = [(-value, key) for key,value in dic.items()] # we temporarily invert the values sign because heapq implements only a min heap
-    largest = heapq.nsmallest(3, heap)
+    largest = heapq.nsmallest(k, heap)
     
     # swap back key-values and values sign
     return [(key, -value) for value, key in largest]
@@ -242,15 +242,16 @@ def search_engine(encoded_query, inverted_idx):
         return result
 
 
-def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
+def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document, k):
     """takes an encoded query the inverted_idx and the squared_tfidf per document,
        searches in the inverted_idx2 and returns the top k documents that are most
        similar to the query (and contain all tokens in the query).
 
     Args:
-         encoded_query (list): a textual query, encoded in integer
+        encoded_query (list): a textual query, encoded in integer
         inverted_idx2 (dict):  a mapping between encoded words (integers) and the documents that contain the word + their tfidf score
         squared_tfidf_per_document (dict): a mapping between each document and the the sum of its squared tfidf scores for each word
+        k (int): number of output documents
 
     Returns:
         [dict]: a dictionary of the top k documents that are most similar to the query
@@ -291,7 +292,7 @@ def search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document):
         all_scores = compute_cosine_similarity(encoded_query, docs_scores, squared_tfidf_per_document)
         
         # returns the top k documents ordered by cos similarity (using heaps)
-        return get_top_k(all_scores)
+        return get_top_k(all_scores, k)
 
 
 def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, uncoded_query):
@@ -311,23 +312,56 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
     """
     
     # apply the second search engine (plot only)
-    plot_result = search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document)
+    plot_result = search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document, 10)
+
+    additional_info = []
+
+    field_to_idx = {
+        'booktitle' : 0,
+        'bookseries' : 1,
+        'bookauthors' : 2,
+        'ratingvalue' : 3,
+        'ratingcount' : 4,
+        'reviewcount' : 5,
+        'numberofpages': 7,
+        'publishingdate': 8,
+        'characters' : 9,
+        'setting' : 10
+    }
+
+    numeric_fields = [3, 4, 5, 7]
+
+    while True:
+        try:
+            info = input('insert additional_info:\n\n Insert field name followed by : and the value\n\n Type "end" when you are done').lower()
+            
+            if info == 'end':
+                break
+            
+            info = info.split(':')
+
+            if info[0] in field_to_idx:
+                additional_info.append(info)
+        except:
+            print('field not found, please try again\n')
     
+
     # define scores for each field of the book
     scores = {
-        0: 1,   #BookTitle
-        1: 1,   #BookSeries
-        2: 1,   #BookAuthors
-        3: 1,   #RatingValue
-        4: 1,   #RatingCount
-        5: 1,   #ReviewCount
-        6: 0,   #Plot
-        7: 1,   #NumberOfPages
-        8: 1,   #PublishingDate
-        9: 1,   #Characters
-        10: 1,  #Setting
-        11: 0   #URL
+        0: 1/2,   #BookTitle
+        1: 1/2,   #BookSeries
+        2: 1/2,   #BookAuthors
+        3: 1/2,   #RatingValue
+        4: 1/2,   #RatingCount
+        5: 1/2,   #ReviewCount
+        6: 0,     #Plot
+        7: 1/2,   #NumberOfPages
+        8: 1/2,   #PublishingDate
+        9: 1/2,   #Characters
+        10: 1/2,  #Setting
+        11: 0     #URL
     }
+    
     final_score = {}
 
     # Iterates over each book, and adjust the score for each of them based on the other fields
@@ -335,17 +369,14 @@ def search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, un
         total_score = score
         with open('.\\tsvs\\article_'+str(doc)+'.tsv', 'r', encoding = 'utf-8') as f:
             all_fields = f.readlines()[2].split('\t')
-            all_fields = [preprocess_text(field) for field in all_fields] # preprocess each field without encoding
-            i = 0
-            for field in all_fields:
-                for token in uncoded_query:
-                    if token in field:
-                        total_score += scores[i]
-                        break
-                i += 1
+            all_fields = [preprocess_text(field) for field in all_fields]     
+            for item in additional_info:
+                if item[1] in all_fields[field_to_idx[item[0]]]:
+                    total_score += total_score * 1/2
         final_score[doc] = total_score
-    
-    return final_score
+    return get_top_k(final_score, 3)
+
+
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -379,9 +410,9 @@ if __name__ == "__main__":
     preprocessed_query = preprocess_text(query)
     encoded_query = encode_query(preprocessed_query, vocabulary)
     p = search_engine(encoded_query, inverted_idx)
-    y = search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document)
-    print_search_engine_result(p)
-    print(y)
+    y = search_engine_2(encoded_query, inverted_idx2, squared_tfidf_per_document, 5)
+    #print_search_engine_result(p)
+    #print(y)
     print_search_engine_2_result(y)
-    #print(search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, preprocessed_query))
+    print(search_engine_3(encoded_query, inverted_idx2, squared_tfidf_per_document, preprocessed_query))
     
