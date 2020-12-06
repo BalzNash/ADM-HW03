@@ -1,11 +1,11 @@
 # Homework 3 - Which book would you recomend?
 
 _Authors:_
-* _Manuel Balzan_
-* _Mohammad Iman Sayyadzadeh_
+* _Manuel Balzan,_
+* _Mohammad Iman Sayyadzadeh and_
 * _Adrienn Timea Aszalos_
-
-_For "La Sapienza" University of Rome, Master in Data Science, class 2020-2021_
+<br>
+_for "La Sapienza" University of Rome, Master in Data Science, class 2020-2021_
 
 <br>
 <br>
